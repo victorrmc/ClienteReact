@@ -2,7 +2,7 @@ import { Button, Card, Checkbox, Label, TextInput } from 'flowbite-react';
 import { useEffect, useState } from 'react'
 import loginService from '../services/login'
 
-export function Login() {
+export function Login({ onTokenChange }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState(null);
@@ -18,17 +18,14 @@ export function Login() {
         setToken(token)
         setUsername('')
         setPassword('')
+
+        onTokenChange(token);
         } catch(e){
             console.log(e)
             //Mostrar error
         }
     }
-    useEffect(() => {
-        const loggedTokenUser = window.localStorage.getItem('loggedTokenUser')
-        if(loggedTokenUser){
-            setToken(loggedTokenUser)
-        }
-    }, [])
+    
 
 
   return (
