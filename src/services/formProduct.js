@@ -7,6 +7,7 @@ const baseURLPriceReductions = 'http://localhost:8080/priceReductions/get'
 const baseURLUsers = 'http://localhost:8080/users/get'
 const baseURLFindProduct = 'http://localhost:8080/products/find/'
 const baseURLCreateProduct = 'http://localhost:8080/products/create'
+const baseURLEditProduct = 'http://localhost:8080/products/edit'
 
 
 export const getSuppliers = async ({ token }) => {
@@ -93,7 +94,7 @@ export const newProduct = async ({ token, productId, description, price, selecte
 };
 
 
-export const editProduct = async ({ token, productId, description, price, state, selectedSuppliers, selectedPriceReduction, creationDate, user }) => {
+export const editProduct = async ({ token, productId, description, price, state, selectedSuppliers, selectedPriceReduction, creationDate, userid }) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
@@ -105,6 +106,11 @@ export const editProduct = async ({ token, productId, description, price, state,
         productId,
         description,
         price,
+        state,
+        creationDate,
+    };
+    requestData.user = {
+        id: userid
     };
 
     if (!selectedSuppliers.includes('null')) {
@@ -116,17 +122,19 @@ export const editProduct = async ({ token, productId, description, price, state,
             priceReductionId: selectedPriceReduction
         };
     }
-
+    console.log(baseURLEditProduct);
+    console.log(requestData);
+    console.log(config);
     try {
-        const response = await axios.post(
-            baseURLCreateProduct,
+        const response = await axios.put(
+            baseURLEditProduct,
             requestData,
             config
         );
 
         return response.data;
     } catch (error) {
-        console.error('Error al crear un nuevo producto:', error);
+        console.error('Error al editar producto:', error);
         throw error;
     }
 };
