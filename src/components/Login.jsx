@@ -12,7 +12,6 @@ export function Login({ onTokenChange }) {
     
         try{
         const token = await loginService.login({ username, password })
-        console.log(token)
 
         window.localStorage.setItem('loggedTokenUser', JSON.stringify(token))
         setToken(token)
@@ -22,7 +21,6 @@ export function Login({ onTokenChange }) {
         onTokenChange(token);
         } catch(e){
             console.log(e)
-            //Mostrar error
         }
     }
     
@@ -31,8 +29,8 @@ export function Login({ onTokenChange }) {
   return (
     <Card className="max-w-sm">
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        {token == null && "hola"}
-        {token != null && "2hola"}
+        {token == null && "Login"}
+        {token != null && "The email and the password don't match"}
         <div>
           <div className="mb-2 block">
             <Label htmlFor="email1" value="Your email" />
