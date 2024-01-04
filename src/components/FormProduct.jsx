@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
 import { getSuppliers, getPriceReductions, getProductID, getUsers, newProduct, editProduct } from '../services/formProduct';  // Importación correcta
-
+import { DateComponent } from './DateComponent';
 export function FormProduct({ token, setisNewProduct, editingProductId = null, isNewProduct }) {
     const [suppliers, setSuppliers] = useState([]);
     const [priceReductions, setPriceReductions] = useState([]);
@@ -19,6 +19,7 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, i
         user: '', // Update this if you have the user data
     });
 
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -95,9 +96,9 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, i
         const selectedUser = e.target.value;
         setSelectedUser(selectedUser);
     };
-    const handleDate = (e) => {
-        console.log("aaaaaaaa")
-        setProductData({ ...productData, creationDate: e.target.value })
+    const handleDate = (date) => {
+        console.log("eeeeeeeeee")
+        setProductData({ ...productData, creationDate: date })
     };
 
     return (
@@ -172,15 +173,15 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, i
                     </Select>
                 </div>
             </div>
+
             <div>
                 <div className="mb-2 block">
                     <Label htmlFor="creationDate" value="Creation Date" />
                 </div>
                 {editingProductId ? 
-                <Datepicker  weekStart={1} // Monday 
-                value={productData.creationDate}  onChange={handleDate} /> 
+                 <DateComponent handleDate={handleDate}/>
                 :
-                <Datepicker disabled />
+                <Datepicker disabled/>
                     }
             </div>
             <div>

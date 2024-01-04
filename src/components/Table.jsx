@@ -1,9 +1,10 @@
 import { Table } from 'flowbite-react';
 import { Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import tableService from '../services/table';
+import { tableService, desactiveProduct } from '../services/table';
 import { FormProduct } from  '../components/FormProduct';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
+import { ModalDetails } from './ModalDetails';
 
 export function TableProduct({ token }) {
 
@@ -15,13 +16,23 @@ export function TableProduct({ token }) {
     setEditingProductId(null); 
     setisNewProduct(true);
   };
+
   const handleClickEdit = (productId) => {
     setEditingProductId(productId);
     setisNewProduct(false);
   };
+
   const handleClickBack = (event) => {
     setisNewProduct(false)
     setEditingProductId(null); 
+  };
+
+  const handleClickDesactive = (productId, reason) => {
+    console.log(reason)
+    const desactivedData = desactiveProduct({ token, ID: productId, reason })
+    console.log("desactivado")
+    //setisNewProduct(false)
+    //setEditingProductId(null); 
   };
 
 
@@ -29,7 +40,7 @@ export function TableProduct({ token }) {
     async function fetchProduct() {
       if (token) {
         try {
-          const productsData = await tableService.table({ token });
+          const productsData = await tableService({ token });
           setProducts(productsData);
         } catch (e) {
           console.log(e);
@@ -97,10 +108,14 @@ export function TableProduct({ token }) {
                     Details
                   </a>
                 </Table.Cell>
-                <Table.Cell>
-                  <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                {/* <Table.Cell>
+                  <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                  onClick={() => handleClickDesactive(product.productId)}>
                     Desactive
                   </a>
+                </Table.Cell> */}
+                <Table.Cell>
+                  <ModalDetails handleClickDesactive={handleClickDesactive} productId={product.productId}/>
                 </Table.Cell>
               </Table.Row>
             ))}
