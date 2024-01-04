@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
 import { getSuppliers, getPriceReductions, getProductID, getUsers, newProduct, editProduct } from '../services/formProduct';  // Importación correcta
 import { DateComponent } from './DateComponent';
-export function FormProduct({ token, setisNewProduct, editingProductId = null, isNewProduct }) {
+export function FormProduct({ token, setisNewProduct, editingProductId = null, handleRefreshTable, setEditingProductId }) {
     const [suppliers, setSuppliers] = useState([]);
     const [priceReductions, setPriceReductions] = useState([]);
     const [user, setUser] = useState([]);
@@ -53,6 +53,8 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, i
 
         console.log(response)
         setisNewProduct(false)
+        setEditingProductId(null)
+        handleRefreshTable()
         setFormError('');
     };
 

@@ -1,7 +1,7 @@
 import { Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 
-export function ModalDetails({ handleClickDesactive, productId }) {
+export function ModalDesactive({ handleClickDesactive, productId }) {
   const [openModal, setOpenModal] = useState(false);
   const [reason, setReason] = useState('');
 
@@ -35,7 +35,10 @@ export function ModalDetails({ handleClickDesactive, productId }) {
             </div>
             
             <div className="flex justify-end text-sm font-medium text-gray-500 dark:text-gray-300"> 
-              <a href="#" className="text-cyan-700 hover:underline dark:text-cyan-500" onClick={() => handleClickDesactive(productId, reason)} >
+              <a href="#" className="text-cyan-700 hover:underline dark:text-cyan-500"  onClick={() => {
+                handleClickDesactive(productId, reason);
+                onCloseModal();
+                }} >
                 Send reason
               </a>
             </div>
