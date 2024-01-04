@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
 import { getSuppliers, getPriceReductions, getProductID, getUsers, newProduct, editProduct } from '../services/formProduct';  // Importación correcta
 import { DateComponent } from './DateComponent';
+import { defaults } from 'autoprefixer';
 export function FormProduct({ token, setisNewProduct, editingProductId = null, handleRefreshTable, setEditingProductId }) {
     const [suppliers, setSuppliers] = useState([]);
     const [priceReductions, setPriceReductions] = useState([]);
@@ -15,6 +16,8 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
         description: '',
         price: '',
         state: '',
+        supplierList: '',
+        priceReduction: '',
         creationDate: '', // Update this if you have the creationDate data
         user: '', // Update this if you have the user data
     });
@@ -43,15 +46,11 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
         }
 
         let response;
-        console.log(productId)
-        console.log(productData.productId)
-        //console.log(productData.creationDate,  productData.state);
-        //console.log(selectedUser)
         editingProductId
             ? (response = editProduct({ token, productId: productData.productId, description, price, state: productData.state, selectedSuppliers, selectedPriceReduction, creationDate: productData.creationDate, userid: selectedUser }))
             : (response = newProduct({ token, productId, description, price, selectedSuppliers, selectedPriceReduction }));
 
-        console.log(response)
+
         setisNewProduct(false)
         setEditingProductId(null)
         handleRefreshTable()
@@ -68,6 +67,9 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                         const userData = await getUsers({ token })
                         setProductData(productData);
                         setUser(userData);
+                        setSelectedSuppliers(productData.supplierList || []);
+                        setSelectedPriceReduction(productData.priceReduction?.priceReductionId)
+                        setSelectedUser(productData.user?.id)
                     }
 
                     const suppliersData = await getSuppliers({ token });
@@ -94,12 +96,10 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
     };
 
     const handleUserChange = (e) => {
-        console.log("aaaaaaaa")
         const selectedUser = e.target.value;
         setSelectedUser(selectedUser);
     };
     const handleDate = (date) => {
-        console.log("eeeeeeeeee")
         setProductData({ ...productData, creationDate: date })
     };
 
@@ -142,13 +142,15 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                 </div>
                 <Select
                     id="suppliers"
-                    multiple
-                    value={selectedSuppliers}
+                    multiple               
                     onChange={handleSupplierChange}
                 >
                     <option value="null">None</option>
                     {suppliers.map((supplier, index) => (
-                        <option key={index} value={`${supplier.supplierId}`}>
+                        <option key={index} value={`${supplier.supplierId}`}
+                        selected={editingProductId && productData.supplierList.some(
+                            (selectedSupplier) => selectedSupplier.supplierId === supplier.supplierId
+                        )}>
                             {`Supplier ID: ${supplier.supplierId}, Name: ${supplier.name}, Country: ${supplier.country}`}
                         </option>
                     ))}
@@ -162,13 +164,12 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                     <Select
                         id="PriceReduction"
                         required
-                        value={selectedPriceReduction}
                         onChange={handlePriceReductionChange}
                     >
                         <option value="">Select an option</option>
                         <option value="null">None</option>
                         {priceReductions.map((priceReduction, index) => (
-                            <option key={index} value={`${priceReduction.priceReductionId}`}>
+                            <option key={index} value={`${priceReduction.priceReductionId}`} selected={editingProductId && productData.priceReduction?.priceReductionId == priceReduction.priceReductionId}>
                                 {`PriceReduction ${index + 1}: ID ${priceReduction.priceReductionId}, Reduced Price ${priceReduction.reducedPrice}`}
                             </option>
                         ))}
@@ -181,7 +182,7 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                     <Label htmlFor="creationDate" value="Creation Date" />
                 </div>
                 {editingProductId ? 
-                 <DateComponent handleDate={handleDate}/>
+                <DateComponent creationDate={productData.creationDate} handleDate={handleDate}/>
                 :
                 <Datepicker disabled/>
                     }
@@ -193,11 +194,10 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                 {editingProductId ?
                     <Select id="state"
                         required
-                        value={selectedUser}
                         onChange={handleUserChange} >
                         <option value="">Select an option</option>
                         {user.map((user) => (
-                            <option key={`${user.id}`} value={`${user.id}`}>
+                            <option key={`${user.id}`} value={`${user.id}`}  selected={editingProductId && productData.user?.id === user.id}>
                                 {`User: ID ${user.id}, UserName ${user.username}`}
                             </option>
                         ))}

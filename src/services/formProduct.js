@@ -122,9 +122,7 @@ export const editProduct = async ({ token, productId, description, price, state,
             priceReductionId: selectedPriceReduction
         };
     }
-    console.log(baseURLEditProduct);
-    console.log(requestData);
-    console.log(config);
+    console.log(requestData)
     try {
         const response = await axios.put(
             baseURLEditProduct,
