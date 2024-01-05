@@ -35,7 +35,7 @@ export function Login({ onTokenChange }) {
           <div className="mb-2 block">
             <Label htmlFor="email1" value="Your email" />
           </div>
-          <TextInput value={username}  onChange={(event) => setUsername(event.target.value)} id="email1" type="email" placeholder="name@flowbite.com" required />
+          <TextInput value={username}  onChange={(event) => setUsername(event.target.value)} id="email1" type="email" placeholder="name@example.com" required />
         </div>
         <div>
           <div className="mb-2 block">
