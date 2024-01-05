@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Datepicker from "tailwind-datepicker-react";
 
-export const DateComponent = ({ handleDate, creationDate }) => {
+export const DateComponent = ({ handleDate, creationDate, isDetails }) => {
     const [show, setShow] = useState(false);
     const [date, setDate] = useState();
 
@@ -61,7 +61,7 @@ export const DateComponent = ({ handleDate, creationDate }) => {
 
     return (
         <div>
-            <Datepicker options={options} value={date ? new Date(date) : null} onChange={handleChange} show={show} setShow={handleClose} />
+            <Datepicker options={options} value={date ? new Date(date) : null} onChange={handleChange} show={isDetails ? false : show} setShow={handleClose} />
         </div>
     );
 };

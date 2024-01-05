@@ -11,6 +11,7 @@ export function TableProduct({ token }) {
   const [products, setProducts] = useState([]);
   const [isNewProduct, setisNewProduct] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
+  const [isDetails, setDetails] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   const handleRefreshTable = () => {
@@ -20,16 +21,24 @@ export function TableProduct({ token }) {
   const handleClickNew = async (event) => {
     setEditingProductId(null);
     setisNewProduct(true);
+    setDetails(false);
   };
 
   const handleClickEdit = (productId) => {
     setEditingProductId(productId);
     setisNewProduct(false);
+    setDetails(false);
+  };
+  const handleClickDetails = (productId) => {
+    setEditingProductId(productId);
+    setisNewProduct(false);
+    setDetails(true);
   };
 
   const handleClickBack = (event) => {
     setisNewProduct(false)
     setEditingProductId(null);
+    setDetails(false);
   };
 
   const handleClickDesactive = async (productId, reason) => {
@@ -63,7 +72,7 @@ export function TableProduct({ token }) {
           <Button outline onClick={handleClickBack}>
             <HiOutlineArrowLeft className="h-6 w-6" />
           </Button>
-          <FormProduct token={token} setisNewProduct={setisNewProduct} editingProductId={editingProductId} setEditingProductId={setEditingProductId} handleRefreshTable={handleRefreshTable} />
+          <FormProduct token={token} setisNewProduct={setisNewProduct} setEditingProductId={setEditingProductId} setDetails={setDetails} isDetails={isDetails} editingProductId={editingProductId}  handleRefreshTable={handleRefreshTable} />
         </div>
       ) : (<div>
         <Button onClick={handleClickNew} className='mb-2'>
@@ -111,7 +120,8 @@ export function TableProduct({ token }) {
                     )} 
                   </Table.Cell>
                   <Table.Cell>
-                    <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                    <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                    onClick={() => handleClickDetails(product.productId)}>
                       Details
                     </a>
                   </Table.Cell>

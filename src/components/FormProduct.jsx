@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
 import { getSuppliers, getPriceReductions, getProductID, getUsers, newProduct, editProduct } from '../services/formProduct';  // Importación correcta
 import { DateComponent } from './DateComponent';
-import { defaults } from 'autoprefixer';
-export function FormProduct({ token, setisNewProduct, editingProductId = null, handleRefreshTable, setEditingProductId }) {
+export function FormProduct({ token, editingProductId = null, isDetails = false, handleRefreshTable, setisNewProduct, setEditingProductId, setDetails }) {
     const [suppliers, setSuppliers] = useState([]);
     const [priceReductions, setPriceReductions] = useState([]);
     const [user, setUser] = useState([]);
@@ -22,7 +21,7 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
         user: '', // Update this if you have the user data
     });
 
-    
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -116,19 +115,19 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                 <div className="mb-2 block">
                     <Label htmlFor="description" value="Description" required />
                 </div>
-                <TextInput name='description' id="description" type="text" sizing="md" value={productData.description} onChange={(e) => setProductData({ ...productData, description: e.target.value })} />
+                <TextInput name='description' id="description" type="text" sizing="md" disabled={isDetails} value={productData.description} onChange={(e) => setProductData({ ...productData, description: e.target.value })} />
             </div>
             <div>
                 <div className="mb-2 block">
                     <Label htmlFor="price" value="Price" />
                 </div>
-                <TextInput name='price' id="price" type="number" sizing="md" value={productData.price} onChange={(e) => setProductData({ ...productData, price: e.target.value })} />
+                <TextInput name='price' id="price" type="number" sizing="md" disabled={isDetails} value={productData.price} onChange={(e) => setProductData({ ...productData, price: e.target.value })} />
             </div>
             <div>
                 <div className="mb-2 block">
                     <Label htmlFor="state" value="State" />
                 </div>
-                {editingProductId ? <Select id="state"  onChange={(e) => setProductData({ ...productData, state: e.target.value })} value={productData.state}>
+                {editingProductId ? <Select id="state" disabled={isDetails} onChange={(e) => setProductData({ ...productData, state: e.target.value })} value={productData.state}>
                     <option>ACTIVE</option>
                     <option>DISCONTINUED</option>
                 </Select> : <Select id="state" disabled readOnly >
@@ -140,17 +139,17 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                 <div className="mb-2 block">
                     <Label htmlFor="suppliers" value="Select Suppliers" />
                 </div>
-                <Select
+                <Select disabled={isDetails}
                     id="suppliers"
-                    multiple               
+                    multiple
                     onChange={handleSupplierChange}
                 >
                     <option value="null">None</option>
                     {suppliers.map((supplier, index) => (
                         <option key={index} value={`${supplier.supplierId}`}
-                        selected={editingProductId && productData.supplierList.some(
-                            (selectedSupplier) => selectedSupplier.supplierId === supplier.supplierId
-                        )}>
+                            selected={editingProductId && productData.supplierList.some(
+                                (selectedSupplier) => selectedSupplier.supplierId === supplier.supplierId
+                            )}>
                             {`Supplier ID: ${supplier.supplierId}, Name: ${supplier.name}, Country: ${supplier.country}`}
                         </option>
                     ))}
@@ -161,7 +160,7 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                     <div className="mb-2 block">
                         <Label htmlFor="PriceReduction" value="Select Price Reduction" />
                     </div>
-                    <Select
+                    <Select disabled={isDetails}
                         id="PriceReduction"
                         required
                         onChange={handlePriceReductionChange}
@@ -181,11 +180,11 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                 <div className="mb-2 block">
                     <Label htmlFor="creationDate" value="Creation Date" />
                 </div>
-                {editingProductId ? 
-                <DateComponent creationDate={productData.creationDate} handleDate={handleDate}/>
-                :
-                <Datepicker disabled/>
-                    }
+                {editingProductId ?
+                    <DateComponent isDetails={isDetails} creationDate={productData.creationDate} handleDate={handleDate} />
+                    :
+                    <Datepicker disabled />
+                }
             </div>
             <div>
                 <div className="mb-2 block">
@@ -194,10 +193,11 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
                 {editingProductId ?
                     <Select id="state"
                         required
-                        onChange={handleUserChange} >
+                        onChange={handleUserChange}
+                        disabled={isDetails}>
                         <option value="">Select an option</option>
                         {user.map((user) => (
-                            <option key={`${user.id}`} value={`${user.id}`}  selected={editingProductId && productData.user?.id === user.id}>
+                            <option key={`${user.id}`} value={`${user.id}`} selected={editingProductId && productData.user?.id === user.id}>
                                 {`User: ID ${user.id}, UserName ${user.username}`}
                             </option>
                         ))}
@@ -207,12 +207,19 @@ export function FormProduct({ token, setisNewProduct, editingProductId = null, h
             </div>
             {formError && <p className="text-red-500">{formError}</p>}
 
-            {editingProductId ? <Button type="submit" className='w-full'>
-                Edit Product
-            </Button> :
-                <Button type="submit" className='w-full'>
-                    New Product
-                </Button>}
+            {!isDetails && (
+                <>
+                    {editingProductId ? (
+                        <Button type="submit" className='w-full'>
+                            Edit Product
+                        </Button>
+                    ) : (
+                        <Button type="submit" className='w-full'>
+                            New Product
+                        </Button>
+                    )}
+                </>
+            )}
         </form>
     );
 }
