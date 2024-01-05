@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
+import { Label, TextInput, Select, Datepicker, Button, List } from 'flowbite-react';
 import { getSuppliers, getPriceReductions, getProductID, getUsers, newProduct, editProduct } from '../services/formProduct';  // Importación correcta
 import { DateComponent } from './DateComponent';
 export function FormProduct({ token, editingProductId = null, isDetails = false, handleRefreshTable, setisNewProduct, setEditingProductId, setDetails }) {
@@ -26,7 +26,6 @@ export function FormProduct({ token, editingProductId = null, isDetails = false,
     const handleSubmit = (event) => {
         event.preventDefault();
         const { productId, description, price } = Object.fromEntries(new window.FormData(event.target))
-
         if (productId === "") {
             setFormError('Please enter a ID.');
             return;
@@ -43,7 +42,6 @@ export function FormProduct({ token, editingProductId = null, isDetails = false,
             setFormError('Please select a price reduction.');
             return;
         }
-
         let response;
         editingProductId
             ? (response = editProduct({ token, productId: productData.productId, description, price, state: productData.state, selectedSuppliers, selectedPriceReduction, creationDate: productData.creationDate, userid: selectedUser }))
@@ -66,7 +64,11 @@ export function FormProduct({ token, editingProductId = null, isDetails = false,
                         const userData = await getUsers({ token })
                         setProductData(productData);
                         setUser(userData);
-                        setSelectedSuppliers(productData.supplierList || []);
+                        let SupplierListID = [];
+                        productData.supplierList.forEach(supplier => {
+                            SupplierListID.push(supplier.supplierId)
+                        });
+                        setSelectedSuppliers(SupplierListID || []);
                         setSelectedPriceReduction(productData.priceReduction?.priceReductionId)
                         setSelectedUser(productData.user?.id)
                     }

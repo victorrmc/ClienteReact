@@ -72,20 +72,17 @@ export const newProduct = async ({ token, productId, description, price, selecte
     if (!selectedSuppliers.includes('null')) {
         requestData.supplierList = selectedSuppliers.map(supplierId => ({ supplierId }));
     }
-
     if (selectedPriceReduction !== 'null') {
         requestData.priceReduction = {
             priceReductionId: selectedPriceReduction
         };
     }
-
     try {
         const response = await axios.post(
             baseURLCreateProduct,
             requestData,
             config
         );
-
         return response.data;
     } catch (error) {
         console.error('Error al crear un nuevo producto:', error);
@@ -116,20 +113,17 @@ export const editProduct = async ({ token, productId, description, price, state,
     if (!selectedSuppliers.includes('null')) {
         requestData.supplierList = selectedSuppliers.map(supplierId => ({ supplierId }));
     }
-
     if (selectedPriceReduction !== 'null') {
         requestData.priceReduction = {
             priceReductionId: selectedPriceReduction
         };
     }
-    console.log(requestData)
     try {
         const response = await axios.put(
             baseURLEditProduct,
             requestData,
             config
         );
-
         return response.data;
     } catch (error) {
         console.error('Error al editar producto:', error);

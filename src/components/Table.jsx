@@ -39,10 +39,10 @@ export function TableProduct({ token }) {
     setisNewProduct(false)
     setEditingProductId(null);
     setDetails(false);
+    handleRefreshTable()
   };
 
   const handleClickDesactive = async (productId, reason) => {
-    console.log(reason)
     await desactiveProduct({ token, ID: productId, reason })
     handleRefreshTable()
   };
@@ -50,10 +50,8 @@ export function TableProduct({ token }) {
 
   useEffect(() => {
     async function fetchProduct() {
-      console.log("Efecto")
       if (token) {
         try {
-          console.log("Efecto con token")
           const productsData = await tableService({ token });
           setProducts(productsData);
         } catch (e) {
