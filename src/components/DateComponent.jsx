@@ -3,16 +3,17 @@ import Datepicker from "tailwind-datepicker-react";
 
 export const DateComponent = ({ handleDate, creationDate }) => {
     const [show, setShow] = useState(false);
-    const [defaultDate, setDefaultDate] = useState("2022-01-01");
+    const [date, setDate] = useState();
 
     useEffect(() => {
         if (creationDate && typeof creationDate === 'string') {
-            setDefaultDate(creationDate.slice(0, 10));
+            setDate(creationDate.slice(0, 10));
         }
     }, [creationDate]);
     
     
     const handleChange = (selectedDate) => {
+        setDate(selectedDate)
         handleDate(selectedDate);
     };
 
@@ -60,7 +61,7 @@ export const DateComponent = ({ handleDate, creationDate }) => {
 
     return (
         <div>
-            <Datepicker options={options} value={defaultDate ? new Date(defaultDate) : null} onChange={handleChange} show={show} setShow={handleClose} />
+            <Datepicker options={options} value={date ? new Date(date) : null} onChange={handleChange} show={show} setShow={handleClose} />
         </div>
     );
 };
