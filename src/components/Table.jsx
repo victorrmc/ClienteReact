@@ -13,9 +13,17 @@ export function TableProduct({ token }) {
   const [editingProductId, setEditingProductId] = useState(null);
   const [isDetails, setDetails] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [showActiveOnly, setShowActiveOnly] = useState(false);
+
+  const handleClickStateHeader = () => {
+    setShowActiveOnly(!showActiveOnly);
+  };
 
   const handleRefreshTable = () => {
-    setRefresh(!refresh);
+    setTimeout(() => {
+      setRefresh(!refresh);
+    }, "500")
+    console.log("Refresco")
   };
 
   const handleClickNew = async (event) => {
@@ -53,7 +61,13 @@ export function TableProduct({ token }) {
       if (token) {
         try {
           const productsData = await tableService({ token });
-          setProducts(productsData);
+
+          // Filtrar productos según el estado activo
+          const filteredProducts = showActiveOnly
+            ? productsData.filter((product) => product.state === "ACTIVE")
+            : productsData;
+
+          setProducts(filteredProducts);
         } catch (e) {
           console.log(e);
         }
@@ -61,7 +75,7 @@ export function TableProduct({ token }) {
     }
 
     fetchProduct();
-  }, [token, refresh]);
+  }, [token, refresh, showActiveOnly]);
 
   return (
     <>
@@ -70,7 +84,7 @@ export function TableProduct({ token }) {
           <Button outline onClick={handleClickBack}>
             <HiOutlineArrowLeft className="h-6 w-6" />
           </Button>
-          <FormProduct token={token} setisNewProduct={setisNewProduct} setEditingProductId={setEditingProductId} setDetails={setDetails} isDetails={isDetails} editingProductId={editingProductId}  handleRefreshTable={handleRefreshTable} />
+          <FormProduct token={token} setisNewProduct={setisNewProduct} setEditingProductId={setEditingProductId} setDetails={setDetails} isDetails={isDetails} editingProductId={editingProductId} handleRefreshTable={handleRefreshTable} />
         </div>
       ) : (<div>
         <Button onClick={handleClickNew} className='mb-2'>
@@ -82,7 +96,10 @@ export function TableProduct({ token }) {
               <Table.HeadCell>ID</Table.HeadCell>
               <Table.HeadCell>Description</Table.HeadCell>
               <Table.HeadCell>Price</Table.HeadCell>
-              <Table.HeadCell>State</Table.HeadCell>
+              <Table.HeadCell onClick={handleClickStateHeader}>
+                {showActiveOnly ? <span className="cursor-pointer text-yellow-400 ">State - ACTIVE</span> :
+                 <span className="cursor-pointer text-zinc-100 ">State - ALL ↓</span>}
+              </Table.HeadCell>
               <Table.HeadCell>Creation Date</Table.HeadCell>
               <Table.HeadCell>Creator</Table.HeadCell>
               <Table.HeadCell>
@@ -115,17 +132,17 @@ export function TableProduct({ token }) {
                       >
                         Edit
                       </a>
-                    )} 
+                    )}
                   </Table.Cell>
                   <Table.Cell>
                     <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                    onClick={() => handleClickDetails(product.productId)}>
+                      onClick={() => handleClickDetails(product.productId)}>
                       Details
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                  {product.state !== "DISCONTINUED" && (
-                    <ModalDesactive handleClickDesactive={handleClickDesactive} productId={product.productId} />
+                    {product.state !== "DISCONTINUED" && (
+                      <ModalDesactive handleClickDesactive={handleClickDesactive} productId={product.productId} />
                     )}
                   </Table.Cell>
                 </Table.Row>
