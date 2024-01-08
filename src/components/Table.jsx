@@ -6,7 +6,7 @@ import { FormProduct } from '../components/FormProduct';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
 import { ModalDesactive } from './ModalDesactive';
 
-export function TableProduct({ token }) {
+export function TableProduct({ token, role }) {
 
   const [products, setProducts] = useState([]);
   const [isNewProduct, setisNewProduct] = useState(false);
@@ -42,6 +42,7 @@ export function TableProduct({ token }) {
     setisNewProduct(false);
     setDetails(true);
   };
+  
 
   const handleClickBack = (event) => {
     setisNewProduct(false)
@@ -60,6 +61,7 @@ export function TableProduct({ token }) {
     async function fetchProduct() {
       if (token) {
         try {
+          
           const productsData = await tableService({ token });
 
           // Filtrar productos según el estado activo
@@ -98,7 +100,7 @@ export function TableProduct({ token }) {
               <Table.HeadCell>Price</Table.HeadCell>
               <Table.HeadCell onClick={handleClickStateHeader}>
                 {showActiveOnly ? <span className="cursor-pointer text-yellow-400 ">State - ACTIVE</span> :
-                 <span className="cursor-pointer text-zinc-100 ">State - ALL ↓</span>}
+                  <span className="cursor-pointer text-zinc-100 ">State - ALL ↓</span>}
               </Table.HeadCell>
               <Table.HeadCell>Creation Date</Table.HeadCell>
               <Table.HeadCell>Creator</Table.HeadCell>
@@ -111,6 +113,9 @@ export function TableProduct({ token }) {
               <Table.HeadCell>
                 <span className="sr-only">Desactive</span>
               </Table.HeadCell>
+              {role === "ADMIN" && <Table.HeadCell>
+                <span className="sr-only">Delete</span>
+              </Table.HeadCell>}
             </Table.Head>
             <Table.Body className="divide-y">
               {products.map((product) => (
@@ -123,6 +128,7 @@ export function TableProduct({ token }) {
                   <Table.Cell>{product.state}</Table.Cell>
                   <Table.Cell>{product.creationDate}</Table.Cell>
                   <Table.Cell>{product.creator}</Table.Cell>
+                  
                   <Table.Cell>
                     {product.state !== "DISCONTINUED" && (
                       <a
@@ -145,6 +151,10 @@ export function TableProduct({ token }) {
                       <ModalDesactive handleClickDesactive={handleClickDesactive} productId={product.productId} />
                     )}
                   </Table.Cell>
+                  {role === "ADMIN" &&   <Table.Cell> <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                      onClick={() => handleClickDetails(product.productId)}>
+                      Delete
+                    </a></Table.Cell>}
                 </Table.Row>
               ))}
             </Table.Body>

@@ -36,7 +36,7 @@ test('New product, edit and deactive', async ({ page }) => {
   await expect(page.getByRole('cell', { name: '0', exact: true })).toBeVisible({ timeout: 1000 });
   await expect(page.getByTestId('table-row-element').getByRole('cell', { name: 'ACTIVE' })).toBeVisible({ timeout: 1000 });
   await page.getByTestId('table-row-element').getByRole('link', { name: 'Edit' }).click()
-  //await page.waitForTimeout(500);
+  await page.waitForTimeout(500);
   await page.getByLabel('Description').fill('prueba2', { timeout: 1000 });
   await page.getByLabel('Select Suppliers').selectOption('None');
   await page.getByLabel('Select Price Reduction').selectOption('None');

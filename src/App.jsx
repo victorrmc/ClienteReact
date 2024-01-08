@@ -9,13 +9,12 @@ import { Button } from 'flowbite-react';
 
 function App() {
   const [appToken, setAppToken] = useState(null);
+  const [role, setRole] = useState(null);
 
   // Función para recibir el token desde el componente hijo
-  const handleTokenChange = (loggedTokenUser) => {
-
-    const {token} =  loggedTokenUser
-    console.log(token)
-    setAppToken(token);
+  const handleTokenChange = (loggedTokenUser, roleUser) => {
+    setRole(roleUser)
+    setAppToken(loggedTokenUser);
   };
 
   const handleLogout= async (event) => {
@@ -25,9 +24,9 @@ function App() {
 
   useEffect(() => {
     const loggedTokenUser = window.localStorage.getItem('loggedTokenUser')
-   
+    console.log(loggedTokenUser)
     if(loggedTokenUser){
-      const {token} = JSON.parse(loggedTokenUser)
+      const token = JSON.parse(loggedTokenUser)
       setAppToken(token)
     }
 }, [])
@@ -40,7 +39,7 @@ function App() {
         </Button>
       )}
       { 
-      appToken ?  <TableProduct token={ appToken }/>
+      appToken ?  <TableProduct token={ appToken } role={ role } />
         : <Login onTokenChange={ handleTokenChange } />
       }
     </>

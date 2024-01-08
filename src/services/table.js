@@ -15,7 +15,7 @@ export const tableService = async ( { token }) => {
     return data
 }
 
-export const desactiveProduct = async ({ token, ID }) => {
+export const desactiveProduct = async ({ token, ID, reason }) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -23,12 +23,25 @@ export const desactiveProduct = async ({ token, ID }) => {
         }
     }
 
-    const requestData = "Es una prueba";
+   // const requestData = "Es una prueba";
 
-    console.log(baseURLDesactiveProduct + ID);
-    console.log(token);
 
-    const { data } = await axios.put(baseURLDesactiveProduct + ID, requestData, config);
+    const { data } = await axios.put(baseURLDesactiveProduct + ID, reason, config);
     return data;
 }
 
+//delete hacer
+export const deleteroduct = async ({ token, ID, reason }) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }
+
+   // const requestData = "Es una prueba";
+
+
+    const { data } = await axios.put(baseURLDesactiveProduct + ID, reason, config);
+    return data;
+}
