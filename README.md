@@ -4,7 +4,11 @@ This project is a product management application consisting of two main parts: t
 
 The application utilizes React and TailwindCSS to provide an attractive and user-friendly interface. Components from the [Flowbite React](https://www.flowbite-react.com/).
 
-Authentication in the application is performed using the token provided by the Spring Boot API. Additionally, a product CRUD (Create, Read, Update, Delete) is implemented, allowing operations on products by making requests to different API endpoints.
+Authentication in the application is performed using the token provided by the Spring Boot API. The application includes separate user and admin control, ensuring distinct roles and permissions for different types of users. User authentication and authorization mechanisms are integrated seamlessly to provide a secure experience.
+
+Additionally, a product CRUD (Create, Read, Update, Delete) is implemented, allowing operations on products by making requests to different API endpoints.
+
+The project includes end-to-end tests using Playwright, ensuring a robust testing approach. The tests cover various scenarios, providing comprehensive validation for the application's functionality.
 
 Within this repository, you will find a detailed user manual in the `UserManual` folder, guiding you through the functionalities and proper usage of the application.
 
