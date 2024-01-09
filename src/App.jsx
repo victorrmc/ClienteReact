@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import {Login} from  './components/login';
-import { TableProduct } from  './components/Table';
+import { TableProduct } from  './components/TableProduct';
 import { useEffect } from 'react';
 import { Button } from 'flowbite-react';
 
@@ -19,15 +17,19 @@ function App() {
 
   const handleLogout= async (event) => {
     window.localStorage.removeItem('loggedTokenUser');
+    window.localStorage.removeItem('loggedRoleUser');
     setAppToken(null);
+    setRole(null);
   };
 
   useEffect(() => {
     const loggedTokenUser = window.localStorage.getItem('loggedTokenUser')
-    console.log(loggedTokenUser)
+    const loggedRoleUser = window.localStorage.getItem('loggedRoleUser')
     if(loggedTokenUser){
       const token = JSON.parse(loggedTokenUser)
+      const role = JSON.parse(loggedRoleUser)
       setAppToken(token)
+      setRole(role);
     }
 }, [])
 

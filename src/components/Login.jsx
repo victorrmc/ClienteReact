@@ -15,8 +15,8 @@ export function Login({ onTokenChange }) {
         const tokenObject = await loginService.login({ username, password })
         const {token} = tokenObject
         window.localStorage.setItem('loggedTokenUser', JSON.stringify(token))
-        //console.log(getRoleFromToken({ token }))
         const roleUser = getRoleFromToken({ token });
+        window.localStorage.setItem('loggedRoleUser', JSON.stringify(roleUser))
         setToken(token)
         setUsername('')
         setPassword('')

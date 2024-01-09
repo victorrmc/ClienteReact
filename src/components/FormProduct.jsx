@@ -82,7 +82,6 @@ export function FormProduct({ token, editingProductId = null, isDetails = false,
                 }
             }
         }
-
         fetchFormProduct();
     }, [token]);
 
