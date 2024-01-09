@@ -64,7 +64,7 @@ export function FormUser({ token, handleRefreshTable, setIsNewUser }) {
             </div>
             <div>
                 <div className="mb-2 block">
-                    <Label htmlFor="role" value="State" />
+                    <Label htmlFor="role" value="Role" />
                 </div>
                  <Select id="role" value={userData.role} onChange={(e) => setUserData({ ...userData, role: e.target.value })} >
                     <option value="">Select an option</option>
