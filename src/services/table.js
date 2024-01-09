@@ -2,6 +2,7 @@ import axios from "axios";
 
 const baseURL = 'http://localhost:8080/products/get'
 const baseURLDesactiveProduct = 'http://localhost:8080/products/desactivate/'
+const baseURLDeleteProduct = 'http://localhost:8080/products/delete/'
 
 
 export const tableService = async ( { token }) => {
@@ -23,15 +24,11 @@ export const desactiveProduct = async ({ token, ID, reason }) => {
         }
     }
 
-   // const requestData = "Es una prueba";
-
-
     const { data } = await axios.put(baseURLDesactiveProduct + ID, reason, config);
     return data;
 }
 
-//delete hacer
-export const deleteroduct = async ({ token, ID, reason }) => {
+export const deleteproduct = async ({ token, ID }) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -39,9 +36,6 @@ export const deleteroduct = async ({ token, ID, reason }) => {
         }
     }
 
-   // const requestData = "Es una prueba";
-
-
-    const { data } = await axios.put(baseURLDesactiveProduct + ID, reason, config);
+    const { data } = await axios.delete(baseURLDeleteProduct + ID, config);
     return data;
 }

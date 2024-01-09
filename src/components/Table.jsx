@@ -1,7 +1,7 @@
 import { Table } from 'flowbite-react';
 import { Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import { tableService, desactiveProduct } from '../services/table';
+import { tableService, desactiveProduct, deleteproduct } from '../services/table';
 import { FormProduct } from '../components/FormProduct';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
 import { ModalDesactive } from './ModalDesactive';
@@ -53,6 +53,11 @@ export function TableProduct({ token, role }) {
 
   const handleClickDesactive = async (productId, reason) => {
     await desactiveProduct({ token, ID: productId, reason })
+    handleRefreshTable()
+  };
+
+  const handleClickDelete = async (productId) => {
+    await deleteproduct({ token, ID: productId })
     handleRefreshTable()
   };
 
@@ -152,7 +157,7 @@ export function TableProduct({ token, role }) {
                     )}
                   </Table.Cell>
                   {role === "ADMIN" &&   <Table.Cell> <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                      onClick={() => handleClickDetails(product.productId)}>
+                      onClick={() => handleClickDelete(product.productId)}>
                       Delete
                     </a></Table.Cell>}
                 </Table.Row>
